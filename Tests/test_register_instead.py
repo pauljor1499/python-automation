@@ -158,6 +158,17 @@ def test_blank_student_information(page, student_registration):
     assert_that(page.is_visible("//div[@class='errorMessage'][contains(.,'Email is required')]")).is_true()
     assert_that(page.is_visible("//div[@class='errorMessage'][contains(.,'Password is required')]")).is_true()
 
+@pytest.mark.student
+def test_student_password_too_long(page, student_registration):
+    page.fill("//input[@id='first_name']", fake.first_name())
+    page.fill("//input[@id='last_name']", fake.last_name())    
+    page.fill("//input[@id='school']", "fakeschool")
+    page.fill("//input[@id='email']", fake.email()) 
+    page.fill("//input[@id='password']", "Testing123!-Testing-Testing-Testing")
+    page.fill("//input[@id='repeat_password']", "Testing123-Testing-Testing-Testing")
+    page.click("//span[contains(.,'Register')]")
+    assert_that(page.is_visible("//div[@class='errorMessage'][contains(.,'Length must not exceed 25 characters.')]")).is_true()
+
 @pytest.mark.teacher
 def test_valid_teacher_registration(page, teacher_registration):
     page.fill("//input[@id='first_name']", fake.first_name())
@@ -313,6 +324,17 @@ def test_blank_teacher_information(page, teacher_registration):
     assert_that(page.is_visible("//div[@class='errorMessage'][contains(.,'School is required')]")).is_true()
     assert_that(page.is_visible("//div[@class='errorMessage'][contains(.,'Email is required')]")).is_true()
     assert_that(page.is_visible("//div[@class='errorMessage'][contains(.,'Password is required')]")).is_true()
+
+@pytest.mark.teacher
+def test_teacher_password_too_long(page, teacher_registration):
+    page.fill("//input[@id='first_name']", fake.first_name())
+    page.fill("//input[@id='last_name']", fake.last_name())    
+    page.fill("//input[@id='school']", "fakeschool")
+    page.fill("//input[@id='email']", fake.email()) 
+    page.fill("//input[@id='password']", "Testing123!-Testing-Testing-Testing")
+    page.fill("//input[@id='repeat_password']", "Testing123-Testing-Testing-Testing")
+    page.click("//span[contains(.,'Register')]")
+    assert_that(page.is_visible("//div[@class='errorMessage'][contains(.,'Length must not exceed 25 characters.')]")).is_true()
 
 @pytest.fixture
 def student_registration(page):
